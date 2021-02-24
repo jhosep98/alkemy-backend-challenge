@@ -10,5 +10,6 @@ export const sequelize = new Sequelize(
   {
     host: "localhost",
     dialect: "mysql",
+    omitNull: true,
   }
 );
