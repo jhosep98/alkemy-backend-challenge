@@ -32,7 +32,7 @@ export const getOnePost = async (req: Request, res: Response) => {
   }
 };
 
-// Create a new Post
+// Create a new post
 export const createPost = async (req: Request, res: Response) => {
   const { title, body, image_url, category, created_at } = req.body;
 
@@ -62,4 +62,17 @@ export const createPost = async (req: Request, res: Response) => {
       data: {},
     });
   }
+};
+
+// Delete a post
+export const deletePost = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  await Post.destroy({
+    where: {
+      id,
+    },
+  });
+  res.json({
+    message: `Post deleted`,
+  });
 };
