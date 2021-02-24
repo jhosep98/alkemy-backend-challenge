@@ -1,5 +1,8 @@
-import express, { Application } from "express";
+import express, { Application, json } from "express";
 import morgan from "morgan";
+
+// routes
+import PostsRoutes from "./routes/posts.routes";
 
 export class App {
   private app: Application;
@@ -8,6 +11,7 @@ export class App {
     this.app = express();
     this.settings();
     this.middlewares();
+    this.routes();
   }
 
   settings() {
@@ -16,6 +20,11 @@ export class App {
 
   middlewares() {
     this.app.use(morgan("dev"));
+    this.app.use(json());
+  }
+
+  routes() {
+    this.app.use("/posts", PostsRoutes);
   }
 
   async listen() {

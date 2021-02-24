@@ -3,15 +3,12 @@ import { Sequelize } from "sequelize";
 
 dotenv.config();
 
-export const connection = async () => {
-  const name = process.env.DATABASE_NAME || "";
-  const user = process.env.DATABASE_USER || "";
-  const password = process.env.DATABASE_PASSWORD || "";
-
-  const sequelize = new Sequelize(name, user, password, {
+export const sequelize = new Sequelize(
+  process.env.DATABASE_NAME as string,
+  process.env.DATABASE_USER as string,
+  process.env.DATABASE_PASSWORD as string,
+  {
     host: "localhost",
     dialect: "mysql",
-  });
-
-  return sequelize;
-};
+  }
+);
