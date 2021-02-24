@@ -7,7 +7,7 @@ export const getPosts = async (req: Request, res: Response) => {
     order: [["created_at", "DESC"]],
     attributes: ["id", "title", "image_url", "category", "created_at"],
   });
-  res.json({ data: posts });
+  return res.json({ data: posts });
 };
 
 // Get a post by id:
@@ -56,7 +56,6 @@ export const createPost = async (req: Request, res: Response) => {
       });
     }
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       message: "something goes wrong",
       data: {},
@@ -67,12 +66,51 @@ export const createPost = async (req: Request, res: Response) => {
 // Delete a post
 export const deletePost = async (req: Request, res: Response) => {
   const { id } = req.params;
-  await Post.destroy({
+  const post = await Post.destroy({
     where: {
       id,
     },
   });
-  res.json({
-    message: `Post deleted`,
+  if (post) {
+    res.json({
+      message: `Post deleted`,
+    });
+  } else {
+    res.status(404).json({
+      message: `could not delete the post with id: ${id}`,
+    });
+  }
+};
+
+// Update post
+export const updatePost = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { title, body, image_url, category, created_at } = req.body;
+
+  const posts = await Post.findAll({
+    attributes: ["id", "title", "body", "image_url", "category", "created_at"],
+    where: {
+      id,
+    },
   });
+
+  if (posts.length > 0 && id) {
+    posts.forEach(async (post) => {
+      await post.update({
+        title,
+        body,
+        image_url,
+        category,
+        created_at,
+      });
+    });
+    res.json({
+      message: "Post Updated successfully",
+      data: posts,
+    });
+  } else {
+    res.status(500).json({
+      message: `error updating post`,
+    });
+  }
 };
