@@ -18,11 +18,11 @@ const Post = sequelize.define(
     image_url: {
       type: Sequelize.TEXT,
     },
-    category: {
-      type: Sequelize.STRING,
-    },
     created_at: {
       type: Sequelize.DATE,
+    },
+    category_id: {
+      type: Sequelize.INTEGER,
     },
   },
   {
